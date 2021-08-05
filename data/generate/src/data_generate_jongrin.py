@@ -89,7 +89,6 @@ s_ch = f'{random.choice(chee)} /cheese;{random.choice(cheese)}/ {random.choice(c
 s_ev = f'{random.choice(vege)} /vegetable;{random.choice(vegtable)}/ {random.choice(exclude)} '
 s_sa = f'{random.choice(sauc)} /sauce;{random.choice(sauce)}/ {random.choice(cont)} '
 lists=[s_l,s_s,s_b,s_ch,s_ev,s_sa]
-print(lists)
 
 
 #사용 함수들
@@ -123,6 +122,3 @@ def gen_data() :
             for j in range(0,len(list_ect)):
                 data.append(list_ect[j])
     return data
-
-gen_data
-print(data)
