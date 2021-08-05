@@ -138,3 +138,9 @@ sand_list1_2 = list(set([
         get_name(menu, 4) + "만 많이 주시면 되요."
      
     for i in range(100)]))
+
+"""# 리스트 합치기"""
+
+def make_list():
+    sand_list = sand_list6_1 + sand_list6_2 + sand_list5_1 + sand_list5_2 + sand_list4_1 + sand_list4_2 + sand_list3_1 + sand_list3_2 + sand_list3_3 + sand_list2_1 + sand_list2_2 + sand_list1_1 + sand_list1_2 + sand_list0_1
+    return sand_list
