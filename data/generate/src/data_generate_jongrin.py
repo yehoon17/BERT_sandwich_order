@@ -100,6 +100,7 @@ def Random_eliminate():
             a = random.randint(0,5)
         exlist.append(a)
     return exlist
+
 #2d to 1d
 def flatten(input):
     flat = []
