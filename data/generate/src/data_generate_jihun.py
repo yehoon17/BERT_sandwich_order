@@ -9,8 +9,7 @@ def menu():
 
   return sandwich, bread, cheese, toping, vegetable, sauce, length
 
-
- def gen_data(): 
+def gen_data(): 
 
   import itertools
   import random
