@@ -146,8 +146,8 @@ def menu():
 
 
   # 데이터 병합
-  data.append(data_1)
-  data.append(data_2)
-  data.append(data_3)
+  data.extend(data_1)
+  data.extend(data_2)
+  data.extend(data_3)
 
   return data
