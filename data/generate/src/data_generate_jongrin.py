@@ -107,8 +107,8 @@ def flatten(input):
     flat = []
     for i in input:
         for j in i:
-            new_list.append(j)
-    return new_list
+            flat.append(j)
+    return flat
 
 
 #순서 재정렬 및 누적저장
