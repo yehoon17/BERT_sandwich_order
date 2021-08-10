@@ -3,6 +3,7 @@ import tensorflow
 assert tensorflow.__version__ == "1.15"
 from data.seq.src.seq import Seq
 from data.seq.resources.tokenizer import tokenizationK
+from data.seq.src.split import Spliter
 
 
 def main():
