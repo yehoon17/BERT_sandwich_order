@@ -5,3 +5,9 @@
 *.DS_Store
 
 tokenizer/
+
+bert_slot_kor
+
+Pipfile
+
+Pipfile.lock
