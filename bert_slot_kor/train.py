@@ -130,7 +130,7 @@ if __name__ == "__main__":
         print("Folder `%s` created" % save_folder_path)
     model.save(save_folder_path)
     tags_to_array_path = os.path.join(load_folder_path, "tags_to_array.pkl")
-    with open(os.path.join(tags_to_array_path, "wb")) as handle:
+    with open(tags_to_array_path, "wb") as handle:
         pickle.dump(tags_to_array, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
     tf.compat.v1.reset_default_graph()
