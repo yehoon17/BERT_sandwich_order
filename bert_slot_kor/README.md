@@ -20,13 +20,13 @@
    - 인자값(training set, validation set의 경로, 훈련된 모델을 저장할 경로, epoch 수, 배치사이즈)
    - 입력받은 인자값은 args에 저장된다.
    - 예시)
-   - `python3 train.py --target=/data/seq/resources/seq_in_train.txt --val=/data/seq/resources/seq_in_valid.txt --save=/saved_model_path --epochs=50 --batch=10`
+   - `python3 train.py -t /data/seq/resources/seq_in_train.txt -v /data/seq/resources/seq_in_valid.txt -s /saved_model_path -e 50 -bs 10`
 
 4. 모델 평가
 
    - 훈련된 모델과 데이터의 경로를 입력해서 모델을 평가한다.
    - 예시)
-   - `python3 eval.py --model=load_folder_path --data=data_folder_path`
+   - `python3 eval.py -m /load_folder_path -d /data_folder_path`
    - 테스트의 결과는 --model에 넣어준 모델 경로 아래의 `test_results`에 저장된다.
 
 5. Inference (임의의 문장을 모델에 넣어보기)
