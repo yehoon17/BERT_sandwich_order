@@ -129,7 +129,7 @@ if __name__ == "__main__":
         os.makedirs(save_folder_path)
         print("Folder `%s` created" % save_folder_path)
     model.save(save_folder_path)
-    tags_to_array_path = os.path.join(load_folder_path, "tags_to_array.pkl")
+    tags_to_array_path = os.path.join(save_folder_path, "tags_to_array.pkl")
     with open(tags_to_array_path, "wb") as handle:
         pickle.dump(tags_to_array, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
