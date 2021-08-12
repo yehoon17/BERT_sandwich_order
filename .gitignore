@@ -6,8 +6,6 @@
 
 tokenizer/
 
-bert_slot_kor
-
 Pipfile
 
 Pipfile.lock
