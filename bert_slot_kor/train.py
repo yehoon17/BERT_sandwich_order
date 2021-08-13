@@ -60,7 +60,7 @@ if __name__ == "__main__":
     sess = tf.compat.v1.Session(config=config)
 
     ############################### TODO 경로 고치기 ###################
-    bert_model_hub_path = "/content/drive/MyDrive/bert-module"
+    bert_model_hub_path = "/content/drive/MyDrive/bert-module/"
     ####################################################################
     bert_vocab_path = os.path.join(
         bert_model_hub_path, "assets/vocab.korean.rawtext.list"
