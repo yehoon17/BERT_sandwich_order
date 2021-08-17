@@ -152,5 +152,4 @@ class BertSlotModel:
         plt.title("LOSS")
         plt.xlabel("epoch")
         plt.ylabel("loss")
-        plt.legend()
-        plt.savefig("/content/drive/MyDrive/save", format="png", dpi=300)
+        plt.savefig("/content/drive/MyDrive/save/loss.png", dpi=300)
