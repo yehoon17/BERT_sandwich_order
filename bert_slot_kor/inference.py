@@ -63,21 +63,21 @@ if __name__ == "__main__":
         if input_text == "quit":
             break
         else:
-          # 사용자가 입력한 한 문장을 슬롯태깅 모델에 넣어서 결과 뽑아내기
-          text_arr = bert_to_array.tokenizer.tokenize(input_text)
+            # 사용자가 입력한 한 문장을 슬롯태깅 모델에 넣어서 결과 뽑아내기
+            text_arr = bert_to_array.tokenizer.tokenize(input_text)
 
-          input_ids, input_mask, segment_ids = bert_to_array.transform([" ".join(text_arr)])
-          
-          # predict slots
-          inferred_tags, slots_score = model.predict_slots([input_ids,
+            input_ids, input_mask, segment_ids = bert_to_array.transform([" ".join(text_arr)])
+
+            # predict slots
+            inferred_tags, slots_score = model.predict_slots([input_ids,
                                                             input_mask,
                                                             segment_ids],
                                                           tags_to_array)
 
-          # 예측된 슬롯 출력
-          print(text_arr)
-          print(inferred_tags[0])
-          print(slots_score[0])
+            # 예측된 슬롯 출력
+            print(text_arr)
+            print(inferred_tags[0])
+            print(slots_score[0])
 
     tf.compat.v1.reset_default_graph()
     
