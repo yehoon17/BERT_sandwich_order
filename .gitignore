@@ -9,3 +9,6 @@ tokenizer/
 Pipfile
 
 Pipfile.lock
+
+*.pyc
+__pycache__/

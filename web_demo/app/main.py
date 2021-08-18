@@ -1,12 +1,20 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request
-import os, pickle
-from to_array.bert_to_array import BERTToArray
-from models.bert_slot_model import BertSlotModel
-from to_array.tokenizationK import FullTokenizer
 from sklearn import metrics
-
 import tensorflow as tf
+import os, pickle
+import sys
+
+sys.path.append(
+    os.path.dirname(
+        os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    )
+)
+from bert_slot_kor.to_array.bert_to_array import BERTToArray
+from bert_slot_kor.models.bert_slot_model import BertSlotModel
+from bert_slot_kor.to_array.tokenizationK import FullTokenizer
+
+graph = tf.get_default_graph()
 
 # enable GPU
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -45,18 +53,18 @@ app.static_folder = "static"
 
 @app.route("/")
 def home():
-
-    ############################### TODO ##########################################
     # 슬롯 사전 만들기
     app.slot_dict = {
         "sandwich": None,
+        "length": None,
         "bread": None,
         "cheese": None,
         "sauce": None,
         "vegetable": None,
         "topping": None,
     }
-    ###############################################################################
+    # 점수제한
+    app.score_limit = 0.8
 
     return render_template("index.html")
 
@@ -65,10 +73,17 @@ def home():
 def get_bot_response():
     userText = request.args.get("msg").strip()  # 사용자가 입력한 문장
 
-    ############################### TODO ##########################################
-    # 1. 사용자가 입력한 한 문장을 슬롯태깅 모델에 넣어서 결과 뽑아내기
-    # 2. 추출된 슬롯 정보를 가지고 더 필요한 정보 물어보는 규칙 만들기 (if문)
-    app.slot_dict["a_slot"] = ""
+    # 사용자가 입력한 문장을 토큰화
+    input_text = " ".join(tokenizer.tokenize(userText))
+    tokens = input_text.split()
+    data_text_arr = list(input_text)
+    data_input_ids, data_input_mask, data_segment_ids = bert_to_array.transform(
+        data_text_arr
+    )
+
+    print("tokens:", tokens)
+    print("data_text_arr:", data_text_arr)
+
     print(app.slot_dict)
 
     return "hi"  # 챗봇이 이용자에게 하는 말을 return
