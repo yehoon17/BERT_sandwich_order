@@ -190,11 +190,15 @@ def get_bot_response():
 
     print(app.slot_dict)
 
+    # 메뉴판의 이름과 일치하는지 검증
     for k, v in app.slot_dict.items():
-        answer = difflib.get_close_matches(app.slot_dict[k], k)
-        if answer:
-            app.slot_dict[k] = answer[0]
-        else:
+        try:
+            answer = difflib.get_close_matches(app.slot_dict[k], locals()[k])
+            if answer:
+                app.slot_dict[k] = answer[0]
+            else:
+                app.slot_dict[k] = None
+        except:
             app.slot_dict[k] = None
 
     # 슬롯이 채워지지 않았을때 예외처리
