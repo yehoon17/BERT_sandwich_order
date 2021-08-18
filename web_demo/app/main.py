@@ -62,7 +62,7 @@ def home():
         "cheese": None,
         "sauce": None,
         "vegetable": None,
-        "topping": None,
+        # "topping": None,
     }
     # 점수제한
     app.score_limit = 0.8
@@ -97,7 +97,7 @@ def get_bot_response():
     cheese_text = ""
     sauce_text = ""
     vegetable_text = ""
-    topping_text = ""
+    # topping_text = ""
 
     # 메뉴 및 선택지
     sandwich = [
@@ -182,13 +182,11 @@ def get_bot_response():
                 vegetable_text += text_arr[i]
                 app.slot_dict["vegetable"] = re.sub("_", "", vegetable_text)
 
-            elif inferred_tags[0][i] == "topping":
-                topping_text += text_arr[i]
-                app.slot_dict["topping"] = re.sub("_", "", topping_text)
+            # elif inferred_tags[0][i] == "topping":
+            # topping_text += text_arr[i]
+            # app.slot_dict["topping"] = re.sub("_", "", topping_text)
         else:
             print("something went wrong!")
-
-    print(app.slot_dict)
 
     # 메뉴판의 이름과 일치하는지 검증
     for k, v in app.slot_dict.items():
@@ -201,14 +199,35 @@ def get_bot_response():
         except:
             app.slot_dict[k] = None
 
-    # 슬롯이 채워지지 않았을때 예외처리
+    # 슬롯이 채워지지 않았을때 체크
+    # empty_slot -> 비어있는 메뉴의 리스트
     empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k] == None]
     if empty_slot:
-        message = ", ".join(empty_slot) + "를 선택해주세요!"
+        message = ", ".join(empty_slot) + "가 아직 선택되지 않았습니다."
     else:
-        message = "감사합니다. 주문이 완료되었습니다."
+        # 빈 슬롯이 없을때
+        if userText.strip() == "예":
+            message = "감사합니다. 주문이 완료되었습니다!"
+        elif userText.strip() == "아니오":
+            message = "알겠습니다. 다시 주문해주세요."
+            # 재주문을 위해 슬롯 초기화
+            app.slot_dict = {
+                "sandwich": None,
+                "length": None,
+                "bread": None,
+                "cheese": None,
+                "sauce": None,
+                "vegetable": None,
+            }
+        else:
+            order = [f"{menu[k]}: {v}" for k, v in app.slot_dict.items()]
+            order = ", ".join(order)
+            message = f"""
+                주문 확인하겠습니다.. 
+                ==================
+                {order}
+                ===================
+                이대로 주문 완료하시겠습니까? (예 or 아니오)
+                """
 
-    return message  # 챗봇이 이용자에게 하는 말을 return
-
-
-###############################################################################
+    return message
