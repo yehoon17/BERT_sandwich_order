@@ -75,24 +75,17 @@ def get_bot_response():
     userText = request.args.get("msg").strip()  # 사용자가 입력한 문장
 
     # 사용자가 입력한 문장을 토큰화
-    input_text = " ".join(tokenizer.tokenize(userText))
-    tokens = input_text.split()
-    data_text_arr = list(input_text)
-    data_input_ids, data_input_mask, data_segment_ids = bert_to_array.transform(
-        data_text_arr
-    )
+    text_arr = tokenizer.tokenize(userText)
+    input_ids, input_mask, segment_ids = bert_to_array.transform([" ".join(text_arr)])
 
-    print("tokens:", tokens)
-    print("data_text_arr:", data_text_arr)
-
-    print(app.slot_dict)
-
+    # 예측
     with graph.as_default():
         with sess.as_default():
             inferred_tags, slots_score = model.predict_slots(
-                [data_input_ids, data_input_mask, data_segment_ids], tags_to_array
+                [input_ids, input_mask, segment_ids], tags_to_array
             )
 
+    print("text_arr:", text_arr)
     print("inferred_tags:", inferred_tags[0])
     print("slots_score:", slots_score[0])
 
