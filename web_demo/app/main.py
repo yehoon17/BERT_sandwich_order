@@ -47,6 +47,7 @@ model = BertSlotModel.load(load_folder_path, sess)
 tokenizer = FullTokenizer(vocab_file=vocab_file)
 
 app = Flask(__name__)
+# 코랩에서 실행 시
 run_with_ngrok(app)
 app.static_folder = "static"
 
