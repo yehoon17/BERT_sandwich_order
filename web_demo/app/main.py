@@ -100,7 +100,7 @@ def get_bot_response():
     topping_text = ""
 
     # 메뉴 및 선택지
-    sandwiches = [
+    sandwich = [
         "페퍼 치킨 슈니첼",
         "페퍼로니 피자 썹",
         "쉬림프",
@@ -122,11 +122,11 @@ def get_bot_response():
         "스파이시 이탈리안",
         "치킨 데리야끼",
     ]
-    breads = ["화이트", "하티", "파마산 오레가노", "위트", "허니오트", "플랫"]
-    cheeses = ["아메리칸", "슈레드", "모짜렐라"]
-    toppings = ["미트", "쉬림프 더블업", "에그마요", "오믈렛", "아보카도", "베이컨", "페퍼로니", "치즈"]
-    vegetables = ["양상추", "토마토", "오이", "피망", "피클", "올리브", "할라피뇨", "양파"]
-    sauces = [
+    bread = ["화이트", "하티", "파마산 오레가노", "위트", "허니오트", "플랫"]
+    cheese = ["아메리칸", "슈레드", "모짜렐라"]
+    topping = ["미트", "쉬림프 더블업", "에그마요", "오믈렛", "아보카도", "베이컨", "페퍼로니", "치즈"]
+    vegetable = ["양상추", "토마토", "오이", "피망", "피클", "올리브", "할라피뇨", "양파"]
+    sauce = [
         "랜치",
         "마요네즈",
         "스위트 어니언",
@@ -142,7 +142,7 @@ def get_bot_response():
         "후추",
         "스모크 바베큐",
     ]
-    lengths = ["15cm", "30cm"]
+    length = ["15cm", "30cm"]
 
     # 메뉴분류
     menu = {
@@ -160,50 +160,42 @@ def get_bot_response():
         if slots_score[0][i] >= app.score_limit:
             if inferred_tags[0][i] == "sandwich":
                 sandwich_text += text_arr[i]
-                sandwich_text = re.sub("_", "", sandwich_text)
-                # 올바르게 슬롯이 입력되었는지 메뉴판을 통해 검증
-                answer = difflib.get_close_matches(sandwich_text, sandwiches)
-                app.slot_dict["sandwich"] = answer[0]
+                app.slot_dict["sandwich"] = re.sub("_", "", sandwich_text)
 
             elif inferred_tags[0][i] == "length":
                 length_text += text_arr[i]
-                length_text = re.sub("_", "", length_text)
-                answer = difflib.get_close_matches(length_text, lengths)
-                app.slot_dict["length"] = answer[0]
+                app.slot_dict["length"] = re.sub("_", "", length_text)
 
             elif inferred_tags[0][i] == "bread":
                 bread_text += text_arr[i]
-                bread_text = re.sub("_", "", bread_text)
-                answer = difflib.get_close_matches(bread_text, breads)
-                app.slot_dict["bread"] = answer[0]
+                app.slot_dict["bread"] = re.sub("_", "", bread_text)
 
             elif inferred_tags[0][i] == "cheese":
                 cheese_text += text_arr[i]
-                cheese_text = re.sub("_", "", cheese_text)
-                answer = difflib.get_close_matches(cheese_text, cheeses)
-                app.slot_dict["cheese"] = answer[0]
+                app.slot_dict["cheese"] = re.sub("_", "", cheese_text)
 
             elif inferred_tags[0][i] == "sauce":
                 sauce_text += text_arr[i]
-                sauce_text = re.sub("_", "", sauce_text)
-                answer = difflib.get_close_matches(sauce_text, sauces)
-                app.slot_dict["sauce"] = answer[0]
+                app.slot_dict["sauce"] = re.sub("_", "", sauce_text)
 
             elif inferred_tags[0][i] == "vegetable":
                 vegetable_text += text_arr[i]
-                vegetable_text = re.sub("_", "", vegetable_text)
-                answer = difflib.get_close_matches(vegetable_text, vegetables)
-                app.slot_dict["vegetable"] = answer[0]
+                app.slot_dict["vegetable"] = re.sub("_", "", vegetable_text)
 
             elif inferred_tags[0][i] == "topping":
                 topping_text += text_arr[i]
-                topping_text = re.sub("_", "", topping_text)
-                answer = difflib.get_close_matches(topping_text, toppings)
-                app.slot_dict["topping"] = answer[0]
+                app.slot_dict["topping"] = re.sub("_", "", topping_text)
         else:
             print("something went wrong!")
 
     print(app.slot_dict)
+
+    for k, v in app.slot_dict.items():
+        answer = difflib.get_close_matches(app.slot_dict[k], k)
+        if answer:
+            app.slot_dict[k] = answer[0]
+        else:
+            app.slot_dict[k] = None
 
     # 슬롯이 채워지지 않았을때 예외처리
     empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k] == None]
