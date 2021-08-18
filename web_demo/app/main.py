@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 from flask_ngrok import run_with_ngrok
 from sklearn import metrics
 import tensorflow as tf
-import os, pickle, re
+import os, pickle, re, difflib
 import sys
 
 sys.path.append(os.path.join(os.getcwd(), "bert_slot_kor"))
@@ -99,42 +99,120 @@ def get_bot_response():
     vegetable_text = ""
     topping_text = ""
 
+    # 메뉴 및 선택지
+    sandwiches = [
+        "페퍼 치킨 슈니첼",
+        "페퍼로니 피자 썹",
+        "쉬림프",
+        "로스트 치킨",
+        "에그마요",
+        "K-바비큐",
+        "로티세리 바비큐 치킨",
+        "풀드 포크 바비큐",
+        "이탈리안 비엠티",
+        "비엘티",
+        "미트볼",
+        "햄",
+        "참치",
+        "써브웨이 클럽",
+        "터키",
+        "베지",
+        "스테이크 & 치즈",
+        "터키 베이컨 아보카도",
+        "스파이시 이탈리안",
+        "치킨 데리야끼",
+    ]
+    breads = ["화이트", "하티", "파마산 오레가노", "위트", "허니오트", "플랫"]
+    cheeses = ["아메리칸", "슈레드", "모짜렐라"]
+    toppings = ["미트", "쉬림프 더블업", "에그마요", "오믈렛", "아보카도", "베이컨", "페퍼로니", "치즈"]
+    vegetables = ["양상추", "토마토", "오이", "피망", "피클", "올리브", "할라피뇨", "양파"]
+    sauces = [
+        "랜치",
+        "마요네즈",
+        "스위트 어니언",
+        "허니 머스타드",
+        "스위트 칠리",
+        "핫 칠리",
+        "사우스 웨스트 치폴레",
+        "머스타드",
+        "홀스래디쉬",
+        "올리브 오일",
+        "레드와인 식초",
+        "소금",
+        "후추",
+        "스모크 바베큐",
+    ]
+    lengths = ["15cm", "30cm"]
+
+    # 메뉴분류
+    menu = {
+        "sandwich": "샌드위치",
+        "length": "길이",
+        "bread": "빵종류",
+        "cheese": "치즈",
+        "sauce": "소스",
+        "vegetable": "제외할 채소",
+        "topping": "추가토핑",
+    }
+
     # 슬롯태깅 실시
     for i in range(0, len(inferred_tags[0])):
         if slots_score[0][i] >= app.score_limit:
             if inferred_tags[0][i] == "sandwich":
                 sandwich_text += text_arr[i]
-                app.slot_dict["sandwich"] = re.sub("_", "", sandwich_text)
+                sandwich_text = re.sub("_", "", sandwich_text)
+                # 올바르게 슬롯이 입력되었는지 메뉴판을 통해 검증
+                answer = difflib.get_close_matches(sandwich_text, sandwiches)
+                app.slot_dict["sandwich"] = answer[0]
 
             elif inferred_tags[0][i] == "length":
                 length_text += text_arr[i]
-                app.slot_dict["length"] = re.sub("_", "", length_text)
+                length_text = re.sub("_", "", length_text)
+                answer = difflib.get_close_matches(length_text, lengths)
+                app.slot_dict["length"] = answer[0]
 
             elif inferred_tags[0][i] == "bread":
                 bread_text += text_arr[i]
-                app.slot_dict["bread"] = re.sub("_", "", bread_text)
+                bread_text = re.sub("_", "", bread_text)
+                answer = difflib.get_close_matches(bread_text, breads)
+                app.slot_dict["bread"] = answer[0]
 
             elif inferred_tags[0][i] == "cheese":
                 cheese_text += text_arr[i]
-                app.slot_dict["cheese"] = re.sub("_", "", cheese_text)
+                cheese_text = re.sub("_", "", cheese_text)
+                answer = difflib.get_close_matches(cheese_text, cheeses)
+                app.slot_dict["cheese"] = answer[0]
 
             elif inferred_tags[0][i] == "sauce":
                 sauce_text += text_arr[i]
-                app.slot_dict["sauce"] = re.sub("_", "", sauce_text)
+                sauce_text = re.sub("_", "", sauce_text)
+                answer = difflib.get_close_matches(sauce_text, sauces)
+                app.slot_dict["sauce"] = answer[0]
 
             elif inferred_tags[0][i] == "vegetable":
                 vegetable_text += text_arr[i]
-                app.slot_dict["vegetable"] = re.sub("_", "", vegetable_text)
+                vegetable_text = re.sub("_", "", vegetable_text)
+                answer = difflib.get_close_matches(vegetable_text, vegetables)
+                app.slot_dict["vegetable"] = answer[0]
 
             elif inferred_tags[0][i] == "topping":
                 topping_text += text_arr[i]
-                app.slot_dict["topping"] = re.sub("_", "", topping_text)
+                topping_text = re.sub("_", "", topping_text)
+                answer = difflib.get_close_matches(topping_text, toppings)
+                app.slot_dict["topping"] = answer[0]
         else:
             print("something went wrong!")
 
     print(app.slot_dict)
 
-    return "hi"  # 챗봇이 이용자에게 하는 말을 return
+    # 슬롯이 채워지지 않았을때 예외처리
+    empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k] == None]
+    if empty_slot:
+        message = ", ".join(empty_slot) + "를 선택해주세요!"
+    else:
+        message = "감사합니다. 주문이 완료되었습니다."
+
+    return message  # 챗봇이 이용자에게 하는 말을 return
 
 
 ###############################################################################
