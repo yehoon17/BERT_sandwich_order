@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 from flask_ngrok import run_with_ngrok
 from sklearn import metrics
 import tensorflow as tf
-import os, pickle
+import os, pickle, re
 import sys
 
 sys.path.append(os.path.join(os.getcwd(), "bert_slot_kor"))
@@ -85,9 +85,54 @@ def get_bot_response():
                 [input_ids, input_mask, segment_ids], tags_to_array
             )
 
+    # 결과 체크
     print("text_arr:", text_arr)
     print("inferred_tags:", inferred_tags[0])
     print("slots_score:", slots_score[0])
+
+    # 슬롯에 해당하는 텍스트를 담을 변수 설정
+    sandwich_text = ""
+    length_text = ""
+    bread_text = ""
+    cheese_text = ""
+    sauce_text = ""
+    vegetable_text = ""
+    topping_text = ""
+
+    # 슬롯태깅 실시
+    for i in range(0, len(inferred_tags[0])):
+        if slots_score[0][i] >= app.score_limit:
+            if inferred_tags[0][i] == "sandwich":
+                sandwich_text += text_arr[i]
+                app.slot_dict["sandwich"] = re.sub("_", "", sandwich_text)
+
+            elif inferred_tags[0][i] == "length":
+                length_text += text_arr[i]
+                app.slot_dict["length"] = re.sub("_", "", length_text)
+
+            elif inferred_tags[0][i] == "bread":
+                bread_text += text_arr[i]
+                app.slot_dict["bread"] = re.sub("_", "", bread_text)
+
+            elif inferred_tags[0][i] == "cheese":
+                cheese_text += text_arr[i]
+                app.slot_dict["cheese"] = re.sub("_", "", cheese_text)
+
+            elif inferred_tags[0][i] == "sauce":
+                sauce_text += text_arr[i]
+                app.slot_dict["sauce"] = re.sub("_", "", sauce_text)
+
+            elif inferred_tags[0][i] == "vegetable":
+                vegetable_text += text_arr[i]
+                app.slot_dict["vegetable"] = re.sub("_", "", vegetable_text)
+
+            elif inferred_tags[0][i] == "topping":
+                topping_text += text_arr[i]
+                app.slot_dict["topping"] = re.sub("_", "", topping_text)
+        else:
+            print("something went wrong!")
+
+    print(app.slot_dict)
 
     return "hi"  # 챗봇이 이용자에게 하는 말을 return
 
