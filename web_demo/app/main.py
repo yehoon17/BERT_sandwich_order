@@ -26,16 +26,15 @@ config = tf.ConfigProto(
 )
 sess = tf.compat.v1.Session(config=config)
 
-# model path
+# pretrained model path
 bert_model_hub_path = "/content/drive/MyDrive/bert-module"
-is_bert = True
 
 # fine-tuned model path
 load_folder_path = "/content/drive/MyDrive/save"
 
 # tokenizer vocab file path
 vocab_file = os.path.join(bert_model_hub_path, "assets/vocab.korean.rawtext.list")
-bert_to_array = BERTToArray(is_bert, vocab_file)
+bert_to_array = BERTToArray(vocab_file)
 
 tags_to_array_path = os.path.join(load_folder_path, "tags_to_array.pkl")
 with open(tags_to_array_path, "rb") as handle:

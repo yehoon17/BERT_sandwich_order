@@ -10,7 +10,7 @@ from tensorflow.python.keras.models import Model
 from tensorflow.python.keras import backend as K
 from tensorflow.python.keras.layers import Input, Dense, TimeDistributed
 
-from models.korbert_layer import KorBertLayer
+from .korbert_layer import KorBertLayer
 
 
 class BertSlotModel:
