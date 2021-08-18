@@ -13,3 +13,7 @@ Pipfile.lock
 *.pyc
 
 __pycache__/
+
+bert-module/
+
+save/

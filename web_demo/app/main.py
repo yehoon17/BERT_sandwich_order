@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request
+from flask_ngrok import run_with_ngrok
 from sklearn import metrics
 import tensorflow as tf
 import os, pickle
 import sys
 
-sys.path.append(
-    os.path.dirname(
-        os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-    )
-)
-from bert_slot_kor.to_array.bert_to_array import BERTToArray
-from bert_slot_kor.models.bert_slot_model import BertSlotModel
-from bert_slot_kor.to_array.tokenizationK import FullTokenizer
+sys.path.append(os.path.join(os.getcwd(), "bert_slot_kor"))
+from to_array.bert_to_array import BERTToArray
+from models.bert_slot_model import BertSlotModel
+from to_array.tokenizationK import FullTokenizer
 
-graph = tf.get_default_graph()
+print(os.getcwd())
+
+graph = tf.compat.v1.get_default_graph()
 
 # enable GPU
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -26,10 +25,12 @@ config = tf.ConfigProto(
 )
 sess = tf.compat.v1.Session(config=config)
 
-# pretrained model path
+# pretrained model path - 로컬에서 실행시 따로 다운로드 받아야함
+# bert_model_hub_path = os.path.join(os.getcwd(), "bert-module")
 bert_model_hub_path = "/content/drive/MyDrive/bert-module"
 
-# fine-tuned model path
+# fine-tuned model path - 로컬에서 실행시 따로 다운로드 받아야함
+# load_folder_path = os.path.join(os.getcwd(), "save")
 load_folder_path = "/content/drive/MyDrive/save"
 
 # tokenizer vocab file path
@@ -45,8 +46,8 @@ model = BertSlotModel.load(load_folder_path, sess)
 
 tokenizer = FullTokenizer(vocab_file=vocab_file)
 
-
 app = Flask(__name__)
+run_with_ngrok(app)
 app.static_folder = "static"
 
 
@@ -84,6 +85,15 @@ def get_bot_response():
     print("data_text_arr:", data_text_arr)
 
     print(app.slot_dict)
+
+    with graph.as_default():
+        with sess.as_default():
+            inferred_tags, slots_score = model.predict_slots(
+                [data_input_ids, data_input_mask, data_segment_ids], tags_to_array
+            )
+
+    print("inferred_tags:", inferred_tags[0])
+    print("slots_score:", slots_score[0])
 
     return "hi"  # 챗봇이 이용자에게 하는 말을 return
 

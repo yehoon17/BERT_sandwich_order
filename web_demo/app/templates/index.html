@@ -50,29 +50,37 @@
   <!-- partial -->
   <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
   <script>
-
+    // 폼, 인풋 등의 값을 받을 변수 설정
+    // get -> querySelector
     const msgerForm = get(".msger-inputarea");
     const msgerInput = get(".msger-input");
     const msgerChat = get(".msger-chat");
 
 
     // Icons made by Freepik from www.flaticon.com
+    // 아이콘 모양 설정
     const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
     const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
+    // 사용자, 봇의 이름 설정
     const BOT_NAME = "ChattyBot";
     const PERSON_NAME = "You";
 
+    // submit 이벤트 설정
     msgerForm.addEventListener("submit", event => {
       event.preventDefault();
 
+      // 입력값 가져오기
       const msgText = msgerInput.value;
       if (!msgText) return;
 
+      // 사용자가 입력한 메시지 나타내기
       appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+      // 나타낸 후에 초기화
       msgerInput.value = "";
       botResponse(msgText);
     });
 
+    // 사용자가 입력한 메시지를 나타내는 함수
     function appendMessage(name, img, side, text) {
       //   Simple solution for small apps
       const msgHTML = `
@@ -94,6 +102,7 @@
       msgerChat.scrollTop += 500;
     }
 
+    // 봇의 반응을 나타내는 함수
     function botResponse(rawText) {
 
       // Bot Response
