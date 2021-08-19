@@ -21,7 +21,7 @@ config = tf.ConfigProto(
     intra_op_parallelism_threads=1,
     inter_op_parallelism_threads=1,
     allow_soft_placement=True,
-    device_count={"CPU": 1},
+    device_count={"GPU": 0},
 )
 sess = tf.compat.v1.Session(config=config)
 
@@ -191,17 +191,21 @@ def get_bot_response():
     # 메뉴판의 이름과 일치하는지 검증
     for k, v in app.slot_dict.items():
         try:
-            answer = difflib.get_close_matches(app.slot_dict[k], locals()[k])
+            answer = difflib.get_close_matches(
+                app.slot_dict[k], locals()[k], cutoff=0.5
+            )
             if answer:
-                app.slot_dict[k] = answer[0]
+                app.slot_dict[k] = answer
             else:
                 app.slot_dict[k] = None
         except:
             app.slot_dict[k] = None
 
+    print(app.slot_dict)
     # 슬롯이 채워지지 않았을때 체크
     # empty_slot -> 비어있는 메뉴의 리스트
     empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k] == None]
+
     if empty_slot:
         message = ", ".join(empty_slot) + "가 아직 선택되지 않았습니다."
     else:
@@ -220,8 +224,17 @@ def get_bot_response():
                 "vegetable": None,
             }
         else:
-            order = [f"{menu[k]}: {v}" for k, v in app.slot_dict.items()]
+            order = []
+            for k, v in app.slot_dict.items():
+                try:
+                    if len(v) == 1:
+                        order.append(f"{menu[k]}: {v[0]}")
+                    else:
+                        order.append(f"{menu[k]}: {', '.join(v)}")
+                except:
+                    order.append(f"{menu[k]}: {None}")
             order = ", ".join(order)
+
             message = f"""
                 주문 확인하겠습니다.. 
                 ==================
