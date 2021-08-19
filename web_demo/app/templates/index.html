@@ -1,89 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>서브웨이 샌드위치 주문</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="#" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/style.css') }}"
+    />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='images/favicon.ico') }}"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Sandwich Chatbot</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="shortcut icon" href="#" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-</head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <section class="msger">
+      <header class="msger-header"></header>
 
-<body>
-  <!-- partial:index.partial.html -->
-  <section class="msger">
-    <header class="msger-header">
-      <div class="msger-header-title">
-        </i> BERT Sandwich Order Project </i>
-      </div>
-    </header>
+      <main class="msger-chat">
+        <div class="msg left-msg">
+          <div class="msg-img"></div>
 
-    <main class="msger-chat">
-      <div class="msg left-msg">
-        <div class="msg-img" style="background-image: url(https://image.flaticon.com/icons/svg/327/327779.svg)"></div>
+          <div class="msg-bubble">
+            <div class="msg-info">
+              <div class="msg-info-name">서브웨이봇</div>
+              <div class="msg-info-time"></div>
+            </div>
 
-        <div class="msg-bubble">
-          <div class="msg-info">
-            <div class="msg-info-name">챗봇</div>
-            <div class="msg-info-time"></div>
-          </div>
-
-          <div class="msg-text">
-            안녕하세요, 샌드위치 주문을 도와드리겠습니다.
-          </div>
-          <div class="msg-text">
-            원하시는 메뉴를 주문해주세요.
+            <div class="msg-text">
+              안녕하세요, 샌드위치 주문을 도와드리겠습니다.
+            </div>
+            <div class="msg-text">원하시는 메뉴를 주문해주세요.</div>
           </div>
         </div>
-      </div>
+      </main>
 
-    </main>
+      <form class="msger-inputarea">
+        <input
+          type="text"
+          class="msger-input"
+          id="textInput"
+          placeholder="Enter your message..."
+        />
+        <button type="submit" class="msger-send-btn">Send</button>
+      </form>
+    </section>
+    <!-- partial -->
+    <script src="https://use.fontawesome.com/releases/v5.0.13/js/all.js"></script>
+    <script>
+      // 폼, 인풋 등의 값을 받을 변수 설정
+      // get -> querySelector
+      const msgerForm = get(".msger-inputarea");
+      const msgerInput = get(".msger-input");
+      const msgerChat = get(".msger-chat");
 
-    <form class="msger-inputarea">
-      <input type="text" class="msger-input" id="textInput" placeholder="Enter your message...">
-      <button type="submit" class="msger-send-btn">Send</button>
-    </form>
-  </section>
-  <!-- partial -->
-  <script src='https://use.fontawesome.com/releases/v5.0.13/js/all.js'></script>
-  <script>
-    // 폼, 인풋 등의 값을 받을 변수 설정
-    // get -> querySelector
-    const msgerForm = get(".msger-inputarea");
-    const msgerInput = get(".msger-input");
-    const msgerChat = get(".msger-chat");
+      // Icons made by Freepik from www.flaticon.com
+      // 아이콘 모양 설정
+      const BOT_IMG =
+        "{{ url_for('static', filename='/images/sandwich.jpeg') }}";
+      const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
+      // 사용자, 봇의 이름 설정
+      const BOT_NAME = "서브웨이봇";
+      const PERSON_NAME = "사용자";
 
+      // submit 이벤트 설정
+      msgerForm.addEventListener("submit", (event) => {
+        event.preventDefault();
 
-    // Icons made by Freepik from www.flaticon.com
-    // 아이콘 모양 설정
-    const BOT_IMG = "https://image.flaticon.com/icons/svg/327/327779.svg";
-    const PERSON_IMG = "https://image.flaticon.com/icons/svg/145/145867.svg";
-    // 사용자, 봇의 이름 설정
-    const BOT_NAME = "챗봇";
-    const PERSON_NAME = "사용자";
+        // 입력값 가져오기
+        const msgText = msgerInput.value;
+        if (!msgText) return;
 
-    // submit 이벤트 설정
-    msgerForm.addEventListener("submit", event => {
-      event.preventDefault();
+        // 사용자가 입력한 메시지 나타내기
+        appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
+        // 나타낸 후에 초기화
+        msgerInput.value = "";
+        botResponse(msgText);
+      });
 
-      // 입력값 가져오기
-      const msgText = msgerInput.value;
-      if (!msgText) return;
-
-      // 사용자가 입력한 메시지 나타내기
-      appendMessage(PERSON_NAME, PERSON_IMG, "right", msgText);
-      // 나타낸 후에 초기화
-      msgerInput.value = "";
-      botResponse(msgText);
-    });
-
-    // 사용자가 입력한 메시지를 나타내는 함수
-    function appendMessage(name, img, side, text) {
-      //   Simple solution for small apps
-      const msgHTML = `
+      // 사용자가 입력한 메시지를 나타내는 함수
+      function appendMessage(name, img, side, text) {
+        //   Simple solution for small apps
+        const msgHTML = `
 <div class="msg ${side}-msg">
   <div class="msg-img" style="background-image: url(${img})"></div>
 
@@ -98,41 +102,32 @@
 </div>
 `;
 
-      msgerChat.insertAdjacentHTML("beforeend", msgHTML);
-      msgerChat.scrollTop += 500;
-    }
+        msgerChat.insertAdjacentHTML("beforeend", msgHTML);
+        msgerChat.scrollTop += 500;
+      }
 
-    // 봇의 반응을 나타내는 함수
-    function botResponse(rawText) {
+      // 봇의 반응을 나타내는 함수
+      function botResponse(rawText) {
+        // Bot Response
+        $.get("/get", { msg: rawText }).done(function (data) {
+          console.log(rawText);
+          console.log(data);
+          const msgText = data;
+          appendMessage(BOT_NAME, BOT_IMG, "left", msgText);
+        });
+      }
 
-      // Bot Response
-      $.get("/get", { msg: rawText }).done(function (data) {
-        console.log(rawText);
-        console.log(data);
-        const msgText = data;
-        appendMessage(BOT_NAME, BOT_IMG, "left", msgText);
+      // document.querySelector
+      function get(selector, root = document) {
+        return root.querySelector(selector);
+      }
+      // 현재 시간을 가져오는 함수
+      function formatDate(date) {
+        const h = "0" + date.getHours();
+        const m = "0" + date.getMinutes();
 
-      });
-
-    }
-
-
-    // document.querySelector
-    function get(selector, root = document) {
-      return root.querySelector(selector);
-    }
-    // 현재 시간을 가져오는 함수
-    function formatDate(date) {
-      const h = "0" + date.getHours();
-      const m = "0" + date.getMinutes();
-
-      return `${h.slice(-2)}:${m.slice(-2)}`;
-    }
-
-
-
-  </script>
-
-</body>
-
+        return `${h.slice(-2)}:${m.slice(-2)}`;
+      }
+    </script>
+  </body>
 </html>
