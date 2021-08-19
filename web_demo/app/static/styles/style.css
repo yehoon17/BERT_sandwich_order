@@ -64,7 +64,7 @@ input:focus::-webkit-input-placeholder {
 
 .msger-chat {
   flex: 1;
-  background-image: url("../images/pattern.png");
+  background-image: url("../images/pattern2.png");
   background-repeat: repeat-y;
   background-size: contain;
   overflow-y: auto;
