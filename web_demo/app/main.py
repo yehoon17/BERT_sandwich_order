@@ -66,13 +66,13 @@ def home():
     }
     # 점수제한
     app.score_limit = 0.8
-    
-    # 변수 
+
+    # 변수
     app.ask_veg = False
     app.confirm_veg = False
     app.ask_sauce = False
     app.confirm_sauce = False
-    
+
     return render_template("index.html")
 
 
@@ -97,7 +97,7 @@ def get_bot_response():
     print("slots_score:", slots_score[0])
 
     # 슬롯에 해당하는 텍스트를 담을 변수 설정
-    slot_text = {k:"" for k in app.slot_dict}
+    slot_text = {k: "" for k in app.slot_dict}
 
     # 메뉴 및 선택지
     sandwich = [
@@ -163,40 +163,39 @@ def get_bot_response():
         else:
             print("something went wrong!")
 
-    #print(slot_text)
+    # print(slot_text)
     # 메뉴판의 이름과 일치하는지 검증
     for k in app.slot_dict:
-      #print("k:",k)
-      for x in locals()[k]:
-        #print(x, slot_text[k])
-        m = re.search(x, slot_text[k])
-        if m:
-          app.slot_dict[k].append(m.group())
-
+        # print("k:",k)
+        for x in locals()[k]:
+            # print(x, slot_text[k])
+            m = re.search(x, slot_text[k])
+            if m:
+                app.slot_dict[k].append(m.group())
 
     print(app.slot_dict)
     # 슬롯이 채워지지 않았을때 체크
     # empty_slot -> 비어있는 메뉴의 리스트
-    empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k] == None]
+    empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k]]
 
     # 채소 슬롯이 비었을 때
     if "제외할 채소" in empty_slot:
-      if not app.ask_veg:
-        message = "안 드시는 채소를 선택해주세요."
-        app.ask_veg = True
-      else:
-        if not app.confirm_veg:
-          message = "선택한 채소가 없습니다. 채소는 다 넣어드릴까요?\n(예/아니오)"
-          app.confirm_veg = True
+        if not app.ask_veg:
+            message = "안 드시는 채소를 선택해주세요."
+            app.ask_veg = True
         else:
-          if userText.strip() == "예":
-              message = f"""
+            if not app.confirm_veg:
+                message = "선택한 채소가 없습니다. 채소는 다 넣어드릴까요?\n(예/아니오)"
+                app.confirm_veg = True
+            else:
+                if userText.strip() == "예":
+                    message = f"""
               채소는 다 넣어드리겠습니다.
               {", ".join(empty_slot)} + "가 아직 선택되지 않았습니다.
               """
-          elif userText.strip() == "아니오":
-            app.ask_veg = False
-            app.confirm_veg = False
+                elif userText.strip() == "아니오":
+                    app.ask_veg = False
+                    app.confirm_veg = False
     elif empty_slot:
         message = ", ".join(empty_slot) + "가 아직 선택되지 않았습니다."
     else:
