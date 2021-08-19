@@ -163,12 +163,9 @@ def get_bot_response():
         else:
             print("something went wrong!")
 
-    # print(slot_text)
     # 메뉴판의 이름과 일치하는지 검증
     for k in app.slot_dict:
-        # print("k:",k)
         for x in locals()[k]:
-            # print(x, slot_text[k])
             m = re.search(x, slot_text[k])
             if m:
                 app.slot_dict[k].append(m.group())
@@ -176,7 +173,7 @@ def get_bot_response():
     print(app.slot_dict)
     # 슬롯이 채워지지 않았을때 체크
     # empty_slot -> 비어있는 메뉴의 리스트
-    empty_slot = [menu[k] for k, v in app.slot_dict.items() if app.slot_dict[k]]
+    empty_slot = [menu[k] for k, v in app.slot_dict.items() if not app.slot_dict[k]]
 
     # 채소 슬롯이 비었을 때
     if "제외할 채소" in empty_slot:
