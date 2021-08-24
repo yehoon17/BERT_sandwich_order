@@ -25,3 +25,5 @@
 <img width="600" alt="test5" src="https://user-images.githubusercontent.com/56901668/130546331-610fc967-df20-47df-88a3-c4ac56749b9d.png">
 
 
+#### **웹 구현시 사용된 모든 로고 및 이미지의 저작권은 서브웨이에게 있습니다.
+
