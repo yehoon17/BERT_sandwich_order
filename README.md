@@ -74,3 +74,4 @@ flask-ngrok == 0.0.25
 ### 8. Web Application
  - `python web_demo/run.py`로 실행
  - Colab에서 실행하기 위해서는 flask-ngrok패키지가 설치되어 있어야한다.
+ - 실제 구현은 `web_demo`의 readme 참고
