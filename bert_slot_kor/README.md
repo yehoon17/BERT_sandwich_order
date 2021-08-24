@@ -37,23 +37,23 @@
    - "Enter your sentence:"라는 문구가 나오면 모델에 넣어보고 싶은 문장을 넣어 주면 됨
    - quit라는 입력을 넣어 주면 종료
 
-## Check List
+## Todo List
 
 eval.py
 
-- [ ] 경로 고치기
+- [x] 경로 고치기
 - [x] test set 데이터 불러오기
 
 inference.py
 
 - [x] 필요한 모듈 불러오기
-- [ ] 경로 고치기
+- [x] 경로 고치기
 - [x] 모델과 기타 필요한 것들 불러오기
 - [x] 사용자가 입력한 한 문장을 슬롯태깅 모델에 넣어서 결과 뽑아내기
 
 train.py
 
-- [ ] 경로 고치기
+- [x] 경로 고치기
 - [x] validation data 불러오기
 - [x] train set과 validation set을 둘 다 넣어서 model.fit 하기
 
@@ -64,4 +64,4 @@ utils.py
 models/bert_slot_model.py
 
 - [x] y_slots를 이용하여 slots_score를 만들기
-- [ ] history_dict에 기록된 loss 변화 추이를 이미지로 저장하는 함수 만들기
+- [x] history_dict에 기록된 loss 변화 추이를 이미지로 저장하는 함수 만들기
