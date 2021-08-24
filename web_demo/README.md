@@ -6,11 +6,12 @@
 - 실행 초기화면
 <img width="942" alt="test1" src="https://user-images.githubusercontent.com/56901668/130546260-5ce532da-d0d3-4dba-9689-173049719dab.png">
 
-### help 명령어
+### `!`커맨드
 - `!` + `명령어`를 입력하면 명령어에 대한 설명을 볼 수 있습니다.
 <img width="937" alt="test2" src="https://user-images.githubusercontent.com/56901668/130546285-b288f5ca-341a-409b-9a28-63d45f32799f.png">
 
-- 예시) `!빵`을 입력하여 빵 종류가 무엇이 있는지 알 수 있습니다.
+### `!`커맨드 예시
+- `!빵`을 입력하여 빵 종류가 무엇이 있는지 알 수 있습니다.
 <img width="942" alt="test3" src="https://user-images.githubusercontent.com/56901668/130546301-8409c8c3-8e4d-43d9-826f-0fc0b96bc572.png">
 
 ### 주문 시나리오
