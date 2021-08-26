@@ -148,8 +148,11 @@ class BertSlotModel:
 
     def visualize_log(self, history_dic, metric_name):
         print("visualizing...")
-        plt.plot(history_dic[metric_name])
+        plt.plot(history_dic["loss"])
+        plt.plot(history_dic["val_loss"])
+        plt.ylim([0, 0.001])
         plt.title("LOSS")
         plt.xlabel("epoch")
         plt.ylabel("loss")
+        plt.legend(["train", "validation"])
         plt.savefig("/content/drive/MyDrive/save/loss.png", dpi=300)
