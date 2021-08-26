@@ -278,10 +278,9 @@ def veg_msg(app, userText):
             app.confirm_veg = True
         else:
             if userText.strip().startswith("예"):
-                message = f"""
-                    채소는 다 넣어드리겠습니다.<br />
-                    {", ".join(empty_slot)} + "가 아직 선택되지 않았습니다.
-                    """
+                app.slot_dict["vegetable"].append('')
+                empty_slot = [menu[k] for k in app.slot_dict if not app.slot_dict[k]]
+                message = "채소는 다 넣어드리겠습니다.<br />" + ', '.join(empty_slot) + "가 아직 선택되지 않았습니다."
             elif userText.strip().startswith("아니오"):
                 app.ask_veg = False
                 app.confirm_veg = False
